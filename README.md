@@ -4,54 +4,34 @@
 
 ```mermaid
 flowchart TD
-    subgraph USER["👤 User (You)"]
-        UPDATE["📝 Update Excel File<br/>(When schedule changes)"]
-        PHONE["📱 Phone with ntfy App<br/>(Subscribed to topic)"]
+    subgraph A["👤 USER"]
+        S1["📝 Update Excel File<br/>Add or change class timings"]
+        S2["📱 Install ntfy App<br/>Subscribe to a topic"]
     end
 
-    subgraph LOCAL["💻 Local PC (Initial Setup)"]
-        EXCEL["📊 Timetable automate.xlsx<br/>(Schedule data)"]
-        SCRIPT["🐍 send_timetable.py<br/>(Python script)"]
+    subgraph B["☁️ GitHub (Free Cloud)"]
+        B1["📁 Repository<br/>Stores your code and Excel"]
+        B2["⚙️ GitHub Actions<br/>Runs automatically at 8 PM"]
     end
 
-    subgraph GITHUB["☁️ GitHub (Free Cloud)"]
-        REPO["📁 Repository<br/>(TimeTable-Notifier)"]
-        ACTIONS["⚙️ GitHub Actions<br/>(CI/CD Pipeline)"]
-        YML["📜 send_schedule.yml<br/>(Workflow config)"]
+    subgraph C["🐍 Python Script"]
+        C1["📖 Read Excel File"]
+        C2["📅 Find tomorrow's day"]
+        C3["🔍 Pick classes for tomorrow"]
+        C4["✏️ Create a message"]
     end
 
-    subgraph DAILY["⏰ Daily Automation (8 PM PST)"]
-        TRIGGER["🕐 Cron Trigger<br/>'0 15 * * *'"]
-        RUNNER["🏃 Ubuntu Runner<br/>(GitHub Server)"]
-        INSTALL["📦 Install Dependencies<br/>pandas, openpyxl, requests"]
-        PARSE["📖 Parse Excel File<br/>(Find tomorrow's classes)"]
-        MESSAGE["✉️ Format Message<br/>(With ✅/❌ for each slot)"]
+    subgraph D["📡 ntfy (Free Service)"]
+        D1["🌐 ntfy.sh Server<br/>Receives your message"]
     end
 
-    subgraph NOTIFY["🔔 Notification Service"]
-        NTFY["📡 ntfy.sh Server<br/>(Free push notifications)"]
+    subgraph E["📱 YOUR PHONE"]
+        E1["🔔 Push Notification<br/>Shows tomorrow's classes"]
     end
 
-    subgraph RESULT["✅ Final Output"]
-        NOTIF["🔔 Push Notification<br/>on your phone"]
-    end
+    A --> B
+    B --> C
+    C --> D
+    D --> E
 
-    %% Connections
-    UPDATE -->|"git push"| REPO
-    EXCEL -->|"Upload once"| REPO
-    SCRIPT -->|"Upload once"| REPO
-    YML -->|"Part of repo"| REPO
-    
-    TRIGGER --> ACTIONS
-    ACTIONS --> RUNNER
-    RUNNER --> INSTALL
-    INSTALL --> PARSE
-    REPO -.->|"GitHub downloads"| PARSE
-    PARSE --> MESSAGE
-    
-    MESSAGE -->|"HTTP POST request"| NTFY
-    NTFY -->|"Push notification"| NOTIF
-    NOTIF --> PHONE
-
-    USER -.->|"Daily at 8 PM"| NOTIF
 ```
