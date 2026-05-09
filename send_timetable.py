@@ -10,7 +10,7 @@ from datetime import datetime , timedelta
 
 #read file
 
-df=pd.read_excel("C:/Users/hp/Documents/Timetable automate.xlsx")
+df=pd.read_excel("Timetable automate.xlsx")
 
 #valid rows
 
