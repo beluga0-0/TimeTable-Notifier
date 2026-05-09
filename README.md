@@ -2,6 +2,7 @@
 
 ## Diagram
 
+```mermaid
 flowchart TD
     subgraph USER["👤 User (You)"]
         UPDATE["📝 Update Excel File<br/>(When schedule changes)"]
@@ -53,3 +54,4 @@ flowchart TD
     NOTIF --> PHONE
 
     USER -.->|"Daily at 8 PM"| NOTIF
+```
