@@ -14,7 +14,7 @@ df=pd.read_excel("Timetable automate.xlsx")
 
 #valid rows
 
-valid_days=["Monday","Tuesday","Wednesday","Thrusday","Friday"]
+valid_days=["Monday","Tuesday","Wednesday","Thursday","Friday"]
 
 df= df[df["Day"].isin(valid_days)]
 
