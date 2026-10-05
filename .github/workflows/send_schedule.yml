@@ -1,26 +1,35 @@
-name: Send Daily Timetable
-
 on:
   schedule:
-    - cron: '55 14 * * *'
+    - cron: '23 17 * * *'        # 17:23 PKT, an off-peak minute
+      timezone: "Asia/Karachi"
   workflow_dispatch:
 
 jobs:
   send-notification:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 200
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v6
-    
+
     - name: Setup Python
       uses: actions/setup-python@v6
       with:
         python-version: '3.11'
-    
+
     - name: Install dependencies
+      run: pip install pandas openpyxl requests
+
+    - name: Wait until 20:00 PKT
+      if: github.event_name == 'schedule'
       run: |
-        pip install pandas openpyxl requests
-    
+        hour=$(TZ=Asia/Karachi date +%H)
+        if [ "$hour" -ge 12 ] && [ "$hour" -lt 20 ]; then
+          target=$(TZ=Asia/Karachi date -d "today 20:00" +%s)
+          now=$(date +%s)
+          sleep $((target - now))
+        fi
+
     - name: Run script
       run: python send_timetable.py
